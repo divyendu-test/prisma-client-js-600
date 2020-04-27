@@ -1,0 +1,32 @@
+datasource postgresql {
+  provider = "postgresql"
+  url = "***"
+}
+
+model Person {
+  id        Int      @default(autoincrement()) @id
+  student   Student? @relation(fields: [studentId], references: [id])
+  studentId Int?
+  parent    Parent?  @relation(fields: [parentId], references: [id])
+  parentId  Int?
+  user      User
+}
+
+model Parent {
+  id       Int       @default(autoincrement()) @id
+  person   Person
+  students Student[]
+}
+
+model Student {
+  id       Int    @default(autoincrement()) @id
+  parent   Parent @relation(fields: [parentId], references: [id])
+  parentId Int
+  person   Person
+}
+
+model User {
+  id       Int     @default(autoincrement()) @id
+  person   Person? @relation(fields: [personId], references: [id])
+  personId Int?
+}
